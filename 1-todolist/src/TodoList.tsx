@@ -9,7 +9,7 @@ export type TodoListPropsType = {
     removeTodoList: (todoListId: string) => void
     addTask: (title: string, todoListId: string) => void
     removeTask: (taskId: string, todoListId: string) => void
-    changeFilter: (filter: FilterValuesTape, todoListId: string) => void
+    changeTodoListFilter: (filter: FilterValuesTape, todoListId: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todoListId: string) => void
 
 }
@@ -23,7 +23,7 @@ const TodoList: FC<TodoListPropsType> = (props: TodoListPropsType) => {
     const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<boolean>(false)
 
-    const handlerCreator = (filter: FilterValuesTape) => () => props.changeFilter(filter, props.todoListId);
+    const handlerCreator = (filter: FilterValuesTape) => () => props.changeTodoListFilter(filter, props.todoListId);
     const addTaskHandler = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle !== "") {

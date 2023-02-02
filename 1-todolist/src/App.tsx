@@ -50,6 +50,9 @@ function App() {
     // ])
 
     const [filter, setFilter] = useState<FilterValuesTape>("all")
+    const changeTodoListFilter = (filter: FilterValuesTape, todoListId: string) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl))
+    }
     const removeTask = (taskId: string, todoListId: string) => {
         // const tasksForUpdate = tasks[todoListId]
         // const updatedTasks = tasksForUpdate.filter(t => t.id !== taskId)
@@ -59,9 +62,7 @@ function App() {
         //
         setTasks({...tasks, [todoListId]: tasks[todoListId].filter(t => t.id !== taskId)})
     }
-    const changeFilter = (filter: FilterValuesTape, todoListId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
-    }
+
     const addTask = (title: string, todoListId: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -87,7 +88,7 @@ function App() {
         delete tasks[todoListId]
         setTasks(copyTasks)
     }
-    let getFilteredTasksForRender =
+    const getFilteredTasksForRender =
         (tasks: Array<TaskType>, filter: FilterValuesTape): Array<TaskType> => {
             switch (filter) {
                 case "active":
@@ -99,7 +100,8 @@ function App() {
             }
         }
 
-    const todoListItems = todoLists.map(tl => {
+    const todoListItems = todoLists.length ?
+    todoLists.map((tl) => {
         const filteredTasksForRender: Array<TaskType> = getFilteredTasksForRender(tasks[tl.id], tl.filter)
         return (
             <TodoList
@@ -109,13 +111,14 @@ function App() {
                 filter={tl.filter}
                 addTask={addTask}
                 removeTask={removeTask}
-                changeFilter={changeFilter}
                 tasks={filteredTasksForRender}
                 removeTodoList={removeTodoList}
                 changeTaskStatus={changeTaskStatus}
+                changeTodoListFilter={changeTodoListFilter}
             />
         )
     })
+        : <span>Create your first Todo List</span>
     return (
         <div className="App">
             {todoListItems}
@@ -123,6 +126,7 @@ function App() {
     );
 }
 export default App;
+
 // useEffect(() => {
 //     console.log(tasks)
 // }, [tasks])
